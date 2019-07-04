@@ -23,6 +23,10 @@ const pickupQueen = (board, row, col) => {
 const isObeyRule = (board, row, col) => {
     let noInOneRow = board[row].filter((c, index) => col !== index && c === 1).length <= 0;
 
+    if (!noInOneRow) {
+        return false;
+    }
+
     let noInOneCol = true;
     for (let i = 0; i < maxRowNum; i++) {
         if (i === row) {
@@ -32,6 +36,10 @@ const isObeyRule = (board, row, col) => {
             noInOneCol = false;
             break;
         }
+    }
+
+    if (!noInOneCol) {
+        return false;
     }
 
     let noInOneSlash = true;
@@ -45,7 +53,53 @@ const isObeyRule = (board, row, col) => {
         }
     }
 
-    return noInOneRow && noInOneCol && noInOneSlash;
+    if (!noInOneSlash) {
+        return false;
+    }
+
+    i = 1;
+    while (row - i >= 0 && col + i < maxColNum) {
+        if (board[row - i][col + i] === 1) {
+            noInOneSlash = false;
+            break;
+        } else {
+            i++;
+        }
+    }
+
+    if (!noInOneSlash) {
+        return false;
+    }
+
+    i = 1;
+    while (row + i < maxRowNum && col - i >= 0) {
+        if (board[row + i][col - i] === 1) {
+            noInOneSlash = false;
+            break;
+        } else {
+            i++;
+        }
+    }
+
+    if (!noInOneSlash) {
+        return false;
+    }
+
+    i = 1;
+    while (row + i < maxRowNum && col + i < maxColNum) {
+        if (board[row + i][col + i] === 1) {
+            noInOneSlash = false;
+            break;
+        } else {
+            i++;
+        }
+    }
+
+    if (!noInOneSlash) {
+        return false;
+    }
+
+    return true;
 };
 
 const maxRowNum = 8,
