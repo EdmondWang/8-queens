@@ -102,6 +102,30 @@ const isObeyRule = (board, row, col) => {
     return true;
 };
 
+const running = (row) => {
+    if (row === maxRowNum) {
+        return true;
+    }
+    attempt++;
+    for (let col = 0; col < maxColNum; col++) {
+        putQueen(chessBoard, row, col);
+        if (isObeyRule(chessBoard, row, col)) {
+            let nextrow = row + 1;
+            let result = running(nextrow);
+            if (result) {
+                return result;
+            }
+        }
+        pickupQueen(chessBoard, row, col);
+    }
+
+    console.log(' ');
+    console.log(chessBoard);
+    console.log(' ');
+
+    return false;
+};
+
 const maxRowNum = 8,
     maxColNum = 8;
 const queensNumber = 8;
@@ -109,27 +133,8 @@ const chessBoard = createChessBoard(maxRowNum, maxColNum);
 
 let row = 0;
 let attempt = 0;
-do {
-    attempt++;
-    for (let col = 0; col < maxColNum; col++) {
-        putQueen(chessBoard, row, col);
-        if (isObeyRule(chessBoard, row, col)) {
-            row++;
-            break;
-        } else {
-            pickupQueen(chessBoard, row, col);
-            if (col === maxColNum - 1) {
-                row--;
-            }
-        }
-    }
 
-    console.log(' ');
-    console.log(`attempt: ${attempt}`);
-    console.log(chessBoard);
-    console.log(' ');
-
-} while (row !== maxRowNum);
+running(attempt, row);
 
 console.log(`total attempt: ${attempt}`);
 printChessBoard();
